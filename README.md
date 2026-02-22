@@ -68,3 +68,106 @@ order_id | customer_id | amount
 102      | 1           | 300
 103      | 2           | 700
 ```
+7. Customers Who Made Purchases but Never Returned Products (Walmart)
+```sql
+SELECT DISTINCT c.customer_id
+FROM Customers c
+JOIN Orders o ON c.customer_id = o.customer_id
+WHERE c.customer_id NOT IN (
+    SELECT customer_id FROM Returns
+);
+```
+8. Show the Count of Orders Per Customer
+```sql
+SELECT c.customer_id,
+       c.customer_name,
+       COUNT(o.order_id) AS order_count
+FROM Customers c
+LEFT JOIN Orders o
+ON c.customer_id = o.customer_id
+GROUP BY c.customer_id, c.customer_name;
+```
+If you also want customer name:
+```sql
+SELECT c.customer_id,
+       c.customer_name,
+       COUNT(o.order_id) AS order_count
+FROM Customers c
+LEFT JOIN Orders o
+ON c.customer_id = o.customer_id
+GROUP BY c.customer_id, c.customer_name;
+```
+```sql
+Customers
+| customer_id | customer_name |
+| ----------- | ------------- |
+| 101         | Amit          |
+| 102         | Neha          |
+| 103         | Rahul         |
+| 104         | Priya         |
+```
+```sql
+Orders
+| order_id | customer_id | order_date | total_amount |
+| -------- | ----------- | ---------- | ------------ |
+| 1        | 101         | 2024-01-01 | 500.00       |
+| 2        | 101         | 2024-01-05 | 700.00       |
+| 3        | 102         | 2024-01-10 | 300.00       |
+| 4        | 102         | 2024-01-12 | 900.00       |
+| 5        | 103         | 2024-01-15 | 400.00       |
+```
+```sql
+Result
+| customer_id | customer_name | order_count |
+| ----------- | ------------- | ----------- |
+| 101         | Amit          | 2           |
+| 102         | Neha          | 2           |
+| 103         | Rahul         | 1           |
+| 104         | Priya         | 0           |
+```
+9. Retrieve All Employees Who Joined in 2023
+```sql
+SELECT *
+FROM Employee
+WHERE EXTRACT(YEAR FROM hire_date) = 2023;
+```
+10. Calculate Average Order Value Per Customer
+```sql
+SELECT customer_id,
+       AVG(total_amount) AS avg_order_value
+FROM Orders
+GROUP BY customer_id;
+```
+```sql
+| order_id | customer_id | order_date | total_amount |
+| -------- | ----------- | ---------- | ------------ |
+| 1        | 101         | 2024-01-01 | 500.00       |
+| 2        | 101         | 2024-01-10 | 700.00       |
+| 3        | 102         | 2024-01-05 | 300.00       |
+| 4        | 102         | 2024-01-20 | 900.00       |
+| 5        | 103         | 2024-01-15 | 400.00       |
+```
+```sql
+Result
+| customer_id | avg_order_value |
+| ----------- | --------------- |
+| 101         | 600.00          |
+| 102         | 600.00          |
+| 103         | 400.00          |
+```
+
+11. Get the Latest Order Placed by Each Customer
+```sql
+SELECT customer_id,
+       MAX(order_date) AS latest_order_date
+FROM Orders
+GROUP BY customer_id;
+```
+12. Find Products That Were Never Sold
+```sql
+SELECT p.product_id
+FROM Products p
+LEFT JOIN Sales s
+ON p.product_id = s.product_id
+WHERE s.product_id IS NULL;
+```
