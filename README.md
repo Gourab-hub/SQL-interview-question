@@ -55,11 +55,12 @@ INNER JOIN orders o
 GROUP BY c.customer_id, c.customer_name;
 
 
-##customers
+customers
 customer_id | customer_name
 1           | Rahul
 2           | Amit
-##orders
+
+orders
 order_id | customer_id | amount
 101      | 1           | 500
 102      | 1           | 300
