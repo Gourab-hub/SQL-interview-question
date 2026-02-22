@@ -171,3 +171,93 @@ LEFT JOIN Sales s
 ON p.product_id = s.product_id
 WHERE s.product_id IS NULL;
 ```
+```sql
+Products
+| product_id | product_name | price |
+| ---------- | ------------ | ----- |
+| 1          | Laptop       | 50000 |
+| 2          | Mobile       | 20000 |
+| 3          | Tablet       | 15000 |
+| 4          | Headphone    | 3000  |
+```
+```sql
+Sales
+| sale_id | product_id | quantity | sale_date  |
+| ------- | ---------- | -------- | ---------- |
+| 101     | 1          | 2        | 2024-01-01 |
+| 102     | 2          | 1        | 2024-01-02 |
+| 103     | 1          | 1        | 2024-01-03 |
+```
+```sql
+Result
+| product_id | product_name |
+| ---------- | ------------ |
+| 3          | Tablet       |
+| 4          | Headphone    |
+```
+13.Identify the Most Selling Product
+```sql
+SELECT product_id,
+       SUM(quantity) AS total_qty
+FROM Sales
+GROUP BY product_id
+ORDER BY total_qty DESC
+LIMIT 1;
+```
+14. Get Total Revenue and Number of Orders Per Region
+
+```sql
+SELECT region,
+       SUM(total_amount) AS total_revenue,
+       COUNT(*) AS order_count
+FROM Orders
+GROUP BY region;
+```
+
+If region is stored in Customer table
+```sql
+SELECT c.region,
+       SUM(o.total_amount) AS total_revenue,
+       COUNT(o.order_id) AS order_count
+FROM Orders o
+JOIN Customers c
+ON o.customer_id = c.customer_id
+GROUP BY c.region;
+```
+```sql
+Customers
+| customer_id | customer_name | region |
+| ----------- | ------------- | ------ |
+| 1           | Amit          | East   |
+| 2           | Neha          | West   |
+| 3           | Rohit         | East   |
+| 4           | Priya         | South  |
+```
+```sql
+Orders
+| order_id | customer_id | total_amount |
+| -------- | ----------- | ------------ |
+| 101      | 1           | 500          |
+| 102      | 2           | 700          |
+| 103      | 1           | 300          |
+| 104      | 3           | 400          |
+| 105      | 4           | 600          |
+```
+```sql
+After JOIN
+| order_id | customer_id | region | total_amount |
+| -------- | ----------- | ------ | ------------ |
+| 101      | 1           | East   | 500          |
+| 102      | 2           | West   | 700          |
+| 103      | 1           | East   | 300          |
+| 104      | 3           | East   | 400          |
+| 105      | 4           | South  | 600          |
+```
+```sql
+Final Output (After GROUP BY)
+| region | total_revenue | order_count |
+| ------ | ------------- | ----------- |
+| East   | 1200          | 3           |
+| West   | 700           | 1           |
+| South  | 600           | 1           |
+```
