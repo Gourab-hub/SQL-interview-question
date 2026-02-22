@@ -43,3 +43,24 @@ SELECT *
 FROM Employee
 ORDER BY salary DESC
 LIMIT 3;
+
+6.total amount per customer using INNER JOIN (Interview)
+
+SELECT c.customer_id,
+       c.customer_name,
+       SUM(o.amount) AS total_amount
+FROM customers c
+INNER JOIN orders o
+    ON c.customer_id = o.customer_id
+GROUP BY c.customer_id, c.customer_name;
+
+
+##customers
+customer_id | customer_name
+1           | Rahul
+2           | Amit
+##orders
+order_id | customer_id | amount
+101      | 1           | 500
+102      | 1           | 300
+103      | 2           | 700
