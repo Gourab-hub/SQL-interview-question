@@ -261,3 +261,218 @@ Final Output (After GROUP BY)
 | West   | 700           | 1           |
 | South  | 600           | 1           |
 ```
+
+15. Count Customers with More Than 5 Orders
+```sql
+SELECT COUNT(DISTINCT customer_id)
+FROM Orders
+GROUP BY customer_id
+HAVING COUNT(*) > 5;
+```
+16. Retrieve Customers with Orders Above Average Order Value (PayPal)
+```sql
+SELECT DISTINCT customer_id
+FROM Orders
+WHERE total_amount > (
+    SELECT AVG(total_amount)
+    FROM Orders
+);
+```
+17. Find All Employees Hired on Weekends
+```sql
+SELECT *
+FROM Employee
+WHERE DAYOFWEEK(hire_date) IN (1, 7);
+```
+18. Find Duplicate Records
+```sql
+SELECT email, COUNT(*) 
+FROM employees
+GROUP BY email
+HAVING COUNT(*) > 1;
+```
+19. Remove Duplicate Records
+
+```sql
+DELETE e1
+FROM employees e1
+JOIN employees e2
+ON e1.email = e2.email
+AND e1.id > e2.id;
+```
+20. Find Employees With Highest Salary in Each Department
+
+```sql
+SELECT department, MAX(salary) AS max_salary
+FROM employees
+GROUP BY department;
+```
+or
+```sql
+SELECT e.*
+FROM employees e
+JOIN (
+    SELECT department, MAX(salary) AS max_salary
+    FROM employees
+    GROUP BY department
+) m
+ON e.department = m.department
+AND e.salary = m.max_salary;
+```
+```sql
+Employees Table
+| emp_id | name  | department | salary |
+| ------ | ----- | ---------- | ------ |
+| 1      | Amit  | IT         | 90000  |
+| 2      | Neha  | IT         | 75000  |
+| 3      | Rohit | HR         | 60000  |
+| 4      | Priya | HR         | 55000  |
+| 5      | Ankit | Finance    | 80000  |
+| 6      | Sneha | Finance    | 70000  |
+```
+```sql
+Step 1: Subquery Result (This becomes table m)
+SELECT department, MAX(salary) AS max_salary
+FROM employees
+GROUP BY department;
+| department | max_salary |
+| ---------- | ---------- |
+| IT         | 90000      |
+| HR         | 60000      |
+| Finance    | 80000      |
+```
+```sql
+Output
+| emp_id | name  | department | salary |
+| ------ | ----- | ---------- | ------ |
+| 1      | Amit  | IT         | 90000  |
+| 3      | Rohit | HR         | 60000  |
+| 5      | Ankit | Finance    | 80000  |
+```
+
+21. Find Employees Who Joined in Last 30 Days
+```sql
+SELECT *
+FROM employees
+WHERE join_date >= CURDATE() - INTERVAL 30 DAY;
+```
+22. Find Employees With No Manager
+```sql
+SELECT *
+FROM employees
+WHERE manager_id IS NULL;
+```
+23. Find Common Records Between Two Tables
+```sql
+SELECT e.id
+FROM employees e
+INNER JOIN managers m
+ON e.id = m.id;
+```
+24. Count Employees in Each Department
+```sql
+SELECT department, COUNT(*) AS total_employees
+FROM employees
+GROUP BY department;
+```
+25.Difference Between WHERE and HAVING
+
+WHERE → Filters rows before grouping
+
+HAVING → Filters groups after GROUP BY
+```sql
+SELECT department, COUNT(*)
+FROM employees
+GROUP BY department
+HAVING COUNT(*) > 5;
+```
+26.All Join Example
+
+```sql
+employees
+| id | name  | department_id |
+| -- | ----- | ------------- |
+| 1  | Amit  | 1             |
+| 2  | Neha  | 2             |
+| 3  | Rohit | 3             |
+| 4  | Kiran | NULL          |
+
+```
+```sql
+departments
+| id | department_name |
+| -- | --------------- |
+| 1  | IT              |
+| 2  | HR              |
+| 4  | Finance         |
+
+```
+INNER JOIN
+```sql
+SELECT e.name, d.department_name
+FROM employees e
+INNER JOIN departments d
+ON e.department_id = d.id;
+```
+
+```sql
+Output
+| name | department_name |
+| ---- | --------------- |
+| Amit | IT              |
+| Neha | HR              |
+```
+
+LEFT JOIN
+
+```sql
+SELECT e.name, d.department_name
+FROM employees e
+LEFT JOIN departments d
+ON e.department_id = d.id;
+```
+```sql
+Output
+| name  | department_name |
+| ----- | --------------- |
+| Amit  | IT              |
+| Neha  | HR              |
+| Rohit | NULL            |
+| Kiran | NULL            |
+
+```
+
+RIGHT JOIN
+
+```sql
+SELECT e.name, d.department_name
+FROM employees e
+RIGHT JOIN departments d
+ON e.department_id = d.id;
+```
+```sql
+Output
+| name | department_name |
+| ---- | --------------- |
+| Amit | IT              |
+| Neha | HR              |
+| NULL | Finance         |
+```
+FULL OUTER JOIN
+```sql
+SELECT e.name, d.department_name
+FROM employees e
+FULL OUTER JOIN departments d
+ON e.department_id = d.id;
+```
+```sql
+Output
+| name  | department_name |
+| ----- | --------------- |
+| Amit  | IT              |
+| Neha  | HR              |
+| Rohit | NULL            |
+| Kiran | NULL            |
+| NULL  | Finance         |
+
+```
