@@ -57,17 +57,35 @@ GROUP BY c.customer_id, c.customer_name;
 ```
 ```sql
 customers
-customer_id | customer_name
-1           | Rahul
-2           | Amit
+| customer_id | customer_name |
+| ----------- | ------------- |
+| 1           | Amit          |
+| 2           | Neha          |
+| 3           | Rohit         |
+| 4           | Kiran         |
+
 ```
 ```sql
 orders
-order_id | customer_id | amount
-101      | 1           | 500
-102      | 1           | 300
-103      | 2           | 700
+| order_id | customer_id | amount |
+| -------- | ----------- | ------ |
+| 101      | 1           | 500    |
+| 102      | 1           | 700    |
+| 103      | 2           | 300    |
+| 104      | 2           | 200    |
+| 105      | 3           | 1000   |
+
 ```
+
+```sql
+output
+| customer_id | customer_name | total_amount |
+| ----------- | ------------- | ------------ |
+| 1           | Amit          | 1200         |
+| 2           | Neha          | 500          |
+| 3           | Rohit         | 1000         |
+```
+
 7. Customers Who Made Purchases but Never Returned Products (Walmart)
 ```sql
 SELECT DISTINCT c.customer_id
