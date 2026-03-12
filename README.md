@@ -494,3 +494,37 @@ Output
 | NULL  | Finance         |
 
 ```
+26. This query finds departments with an average salary above $75,000, sorted by department name in reverse alphabetical order.
+```sql
+SELECT d.dept_name, AVG(e.salary) AS avg_salary
+FROM employee e
+LEFT JOIN department d 
+ON e.dept_id = d.dept_id
+GROUP BY d.dept_name
+HAVING AVG(e.salary) > 75000
+ORDER BY d.dept_name DESC;
+```
+## Employee Table
+
+| emp_id | emp_name | salary | dept_id |
+|------|------|------|------|
+| 1 | Karan | 30000 | 2 |
+| 2 | Ayush | 40000 | 1 |
+| 3 | Rohit | 50000 | 5 |
+| 4 | Ramesh | 20000 | 3 |
+| 5 | Abhi | 80000 | 4 |
+| 6 | Dilip | 20000 | 1 |
+
+- `dept_id` is a **foreign key** that refers to the department table.
+
+---
+
+## Department Table
+
+| dept_id | dept_name |
+|------|------|
+| 1 | IT |
+| 2 | Admin |
+| 3 | HR |
+| 4 | Accounts |
+| 5 | Finance |
