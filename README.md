@@ -551,19 +551,22 @@ JOIN (
    AND e.salary = m.max_salary;
 ```
 ```sql
-Employee
+##Employee
+
 | id | dept_id | salary | name    |
 | -- | ------- | ------ | ------- |
 | 1  | 10      | 50000  | Alice   |
 | 2  | 10      | 70000  | Bob     |
 | 3  | 20      | 60000  | Charlie |
 | 4  | 20      | 80000  | David   |
-Department
+
+##Department
 | id | name |
 | -- | ---- |
 | 10 | IT   |
 | 20 | HR   |
-Output
+
+##Output
 | department_name | employee_name | salary |
 | --------------- | ------------- | ------ |
 | IT              | Bob           | 70000  |
