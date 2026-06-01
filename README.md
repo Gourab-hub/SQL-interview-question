@@ -528,3 +528,46 @@ ORDER BY d.dept_name DESC;
 | 3 | HR |
 | 4 | Accounts |
 | 5 | Finance |
+
+27.
+
+Employee - id, dept_id, salary, name Department - id, name 
+
+Identify employees having highest salary from each dept, along with dept name.
+```sql
+SELECT
+    d.name AS department_name,
+    e.name AS employee_name,
+    e.salary
+FROM Employee e
+JOIN Department d
+    ON e.dept_id = d.id
+JOIN (
+    SELECT dept_id, MAX(salary) AS max_salary
+    FROM Employee
+    GROUP BY dept_id
+) m
+    ON e.dept_id = m.dept_id
+   AND e.salary = m.max_salary;
+```
+```sql
+Employee
+| id | dept_id | salary | name    |
+| -- | ------- | ------ | ------- |
+| 1  | 10      | 50000  | Alice   |
+| 2  | 10      | 70000  | Bob     |
+| 3  | 20      | 60000  | Charlie |
+| 4  | 20      | 80000  | David   |
+Department
+| id | name |
+| -- | ---- |
+| 10 | IT   |
+| 20 | HR   |
+Output
+| department_name | employee_name | salary |
+| --------------- | ------------- | ------ |
+| IT              | Bob           | 70000  |
+| HR              | David         | 80000  |
+
+```
+
